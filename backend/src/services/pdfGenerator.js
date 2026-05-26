@@ -3,6 +3,7 @@ import puppeteer from "puppeteer";
 export async function generatePDF(html) {
   const browser = await puppeteer.launch({
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
   });
   try {
     const page = await browser.newPage();
