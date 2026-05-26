@@ -1,0 +1,60 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String             @id @default(uuid()) @db.Uuid
+  name         String?
+  email        String             @unique
+  passwordHash String             @map("password_hash")
+  createdAt    DateTime           @default(now()) @map("created_at")
+  resumes      Resume[]
+  jobDescriptions JobDescription[]
+
+  @@map("users")
+}
+
+model Resume {
+  id            String        @id @default(uuid()) @db.Uuid
+  userId        String        @map("user_id") @db.Uuid
+  fileName      String        @map("file_name")
+  extractedText String?       @map("extracted_text")
+  parsedJson    Json?         @map("parsed_json")
+  createdAt     DateTime      @default(now()) @map("created_at")
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  matchResults  MatchResult[]
+
+  @@map("resumes")
+}
+
+model JobDescription {
+  id        String        @id @default(uuid()) @db.Uuid
+  userId    String        @map("user_id") @db.Uuid
+  title     String?
+  content   String
+  createdAt DateTime      @default(now()) @map("created_at")
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  matchResults MatchResult[]
+
+  @@map("job_descriptions")
+}
+
+model MatchResult {
+  id            String   @id @default(uuid()) @db.Uuid
+  resumeId      String   @map("resume_id") @db.Uuid
+  jdId          String   @map("jd_id") @db.Uuid
+  matchScore    Float?   @map("match_score")
+  matchedSkills Json?    @map("matched_skills")
+  missingSkills Json?    @map("missing_skills")
+  suggestions   Json?
+  createdAt     DateTime @default(now()) @map("created_at")
+  resume        Resume   @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  jobDescription JobDescription @relation(fields: [jdId], references: [id], onDelete: Cascade)
+
+  @@map("match_results")
+}
