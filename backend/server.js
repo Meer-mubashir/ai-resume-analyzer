@@ -9,7 +9,19 @@ import reportRoutes from "./src/routes/reports.js";
 
 const app = express();
 
-app.use(cors({ origin: config.frontendUrl, credentials: true }));
+const allowedOrigins = [
+  config.frontendUrl,
+  "https://mir42217-resume-ai.hf.space",
+  "https://resumeai.free.nf",
+  "http://resumeai.free.nf",
+];
+app.use(cors({
+  origin: (origin, cb) => {
+    if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
+    cb(null, true);
+  },
+  credentials: true,
+}));
 app.use(express.json({ limit: "10mb" }));
 
 app.get("/", (req, res) => {

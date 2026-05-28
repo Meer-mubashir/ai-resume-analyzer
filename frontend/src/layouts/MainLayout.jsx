@@ -1,6 +1,7 @@
 import { Navigate, Outlet, Link, useLocation } from "react-router-dom";
 import { useAuth } from "../store/authStore";
 import { useState } from "react";
+import Footer from "../components/Footer";
 
 export default function MainLayout() {
   const { isAuthenticated, user, logout } = useAuth();
@@ -75,9 +76,10 @@ export default function MainLayout() {
           </div>
         )}
       </header>
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 animate-fade-in">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 animate-fade-in w-full">
         <Outlet />
       </main>
+      <Footer />
     </div>
   );
 }

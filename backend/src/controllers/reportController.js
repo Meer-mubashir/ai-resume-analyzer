@@ -13,7 +13,12 @@ export async function generateReport(req, res) {
     if (!match) return res.status(404).json({ error: "Match not found" });
 
     const html = buildReportHTML(match);
-    const pdfBuffer = await generatePDF(html);
+    let pdfBuffer;
+    try {
+      pdfBuffer = await generatePDF(html);
+    } catch {
+      return res.status(501).json({ error: "PDF generation unavailable in this environment. Use the HTML report instead.", html });
+    }
 
     res.set({
       "Content-Type": "application/pdf",
