@@ -11,7 +11,7 @@
       "routePrefix": "/_/backend",
       "framework": "node",
       "entrypoint": "server.js",
-      "installCommand": "npm install && npx prisma generate"
+      "installCommand": "npm install"
     }
   }
 }
