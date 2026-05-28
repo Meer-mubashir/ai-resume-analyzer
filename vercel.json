@@ -9,6 +9,8 @@
     "backend": {
       "root": "backend",
       "routePrefix": "/_/backend",
+      "framework": "node",
+      "entrypoint": "server.js",
       "installCommand": "npm install"
     }
   }
